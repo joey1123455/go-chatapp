@@ -76,9 +76,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, fmt.Sprintf("Error when trying to get user from %s: %s", provider, err), http.StatusInternalServerError)
 			return
 		}
+		//sets the values for the auth cookie
 		authCookieValue := objx.New(map[string]interface{}{
-			"name": user.Name(),
+			"name":       user.Name(),
+			"avatar_url": user.AvatarURL(),
 		}).MustBase64()
+		//sets the cookie
 		http.SetCookie(w, &http.Cookie{
 			Name:  "auth",
 			Value: authCookieValue,
