@@ -44,13 +44,18 @@ func main() {
 		github.New("80eca123afcb2a6d87ee", "8f22d5801e542c43395a818125e95597cb323121", "http://127.0.0.1:8080/auth/callback/github"),
 		google.New("842680277389-ln21cp0oga1g9t0o1s1g2tq0mivg7vi8.apps.googleusercontent.com", "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", "http://127.0.0.1:8080/auth/callback/google"),
 	)
+	// creates the room
 	r := newRoom()
-	// r.tracer = trace.New(os.Stdout)
 	//root
+	//templateHandler renders the front end template on the routes
+	//MustAuth wrappes a authentication checker and redirect on the route
 	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
+	// provides the websocket connection for chat rooms
 	http.Handle("/room", r)
 	http.Handle("/login", &templateHandler{filename: "login.html"})
+	//handles oauth client requests
 	http.HandleFunc("/auth/", loginHandler)
+	http.HandleFunc("/logout", logoutHandler)
 	//initiate the room
 	go r.run()
 	//start the web server
