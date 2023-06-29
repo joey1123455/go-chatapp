@@ -45,7 +45,7 @@ func main() {
 		google.New("842680277389-ln21cp0oga1g9t0o1s1g2tq0mivg7vi8.apps.googleusercontent.com", "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", "http://127.0.0.1:8080/auth/callback/google"),
 	)
 	// creates the room
-	r := newRoom()
+	r := newRoom(UseAuthAvater)
 	//root
 	//templateHandler renders the front end template on the routes
 	//MustAuth wrappes a authentication checker and redirect on the route

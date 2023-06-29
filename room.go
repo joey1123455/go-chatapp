@@ -28,17 +28,20 @@ type room struct {
 	leave chan *client
 	//clients holds all clients in the room
 	clients map[*client]bool
+	//avatar is how avater info will be obtained
+	avatar Avater
 	//tracer recieves information of activity
 	tracer trace.Tracer
 }
 
 // newRoom makes a new room
-func newRoom() *room {
+func newRoom(avatar Avater) *room {
 	return &room{
 		forward: make(chan *message),
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
+		avatar:  avatar,
 		tracer:  trace.Off(),
 	}
 }
