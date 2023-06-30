@@ -46,16 +46,23 @@ func main() {
 	)
 	// creates the room
 	r := newRoom(UseGravater)
-	//root
+
+	//routes
 	//templateHandler renders the front end template on the routes
 	//MustAuth wrappes a authentication checker and redirect on the route
 	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
 	// provides the websocket connection for chat rooms
 	http.Handle("/room", r)
+	//user login template link
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	//handles oauth client requests
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
+	//user avater upload template link
+	http.Handle("/upload", MustAuth(&templateHandler{filename: "upload.html"}))
+	//handles avater upload
+	http.HandleFunc("/uploader", uploadHandler)
+
 	//initiate the room
 	go r.run()
 	//start the web server

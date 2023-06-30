@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/md5"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 )
@@ -11,10 +10,6 @@ import (
 // ErrNoAvater is the error that is returned when the avater instance is unable
 // to provide a avater URL.
 var ErrNoAvaterURL = errors.New("chat: Unable to get an avatar URL")
-
-// ErrNoEmailAdrrs is the error that is returned when the avater instance is unable
-// to provide a email URL.
-var ErrNoEmailAdrrs = errors.New("chat: Unable to get an email address")
 
 // Avatar represents types capable of representing user profile pictures
 type Avater interface {
@@ -39,12 +34,12 @@ func (AuthAvatar) GetAvaterURL(c *client) (string, error) {
 }
 
 func (GravatarAvatar) GetAvaterURL(c *client) (string, error) {
-	if email, ok := c.userData["email"]; ok {
-		if emailStr, ok := email.(string); ok {
+	if userid, ok := c.userData["userid"]; ok {
+		if useridStr, ok := userid.(string); ok {
 			m := md5.New()
-			io.WriteString(m, strings.ToLower(emailStr))
-			return fmt.Sprintf("//www.gravatar.com/avatar/%x", m.Sum(nil)), nil
+			io.WriteString(m, strings.ToLower(useridStr))
+			return ("//www.gravatar.com/avatar/" + useridStr), nil
 		}
 	}
-	return "", ErrNoEmailAdrrs
+	return "", ErrNoAvaterURL
 }
